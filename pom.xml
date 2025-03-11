@@ -1,34 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
 	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<java.version>17</java.version>
+		<project.groupId>br.com.pawloandre.users</project.groupId>
+		<project.artifactId>users</project.artifactId>
+		<project.version>1.0.0</project.version>
+		<docker.image.name>${project.artifactId}:${project.version}</docker.image.name>
+		<git-user>moreiracruz</git-user>
+		<git-repository>users</git-repository>
+	</properties>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.pawloandre.users.repository</groupId>
-	<artifactId>users</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>users</name>
+	
+	<groupId>${project.groupId}</groupId>
+	<artifactId>${project.artifactId}</artifactId>
+	<version>${project.version}-SNAPSHOT</version>
+	<name>${project.artifactId}</name>
 	<description>RESTful API for user management</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
+
+    <url>https://www.moreiracruz.com.br</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
 	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>17</java.version>
-	</properties>
+        <developer>
+            <name>Paulo André Moreira Cruz</name>
+            <email>pawloandre@icloud.com</email>
+            <url>https://www.moreiracruz.com.br</url>
+            <organization>Moreira Cruz</organization>
+            <organizationUrl>https://www.moreiracruz.com.br</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>-3</timezone>
+            <properties>
+                <phone>+55 (83) 99637-7548</phone>
+            </properties>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/${git-user}/${git-repository}.git</connection>
+        <developerConnection>scm:git:ssh://github.com/${git-user}/${git-repository}.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/${git-user}/${git-repository}</url>
+    </scm>
+    
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -41,6 +74,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
 		<dependency>
@@ -72,6 +109,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${docker.image.name}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

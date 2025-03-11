@@ -1,4 +1,4 @@
-package br.com.pawloandre.users.repository.users;
+package br.com.pawloandre.users;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

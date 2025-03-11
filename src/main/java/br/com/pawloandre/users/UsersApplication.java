@@ -1,4 +1,4 @@
-package br.com.pawloandre.users.repository.users;
+package br.com.pawloandre.users;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

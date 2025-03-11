@@ -54,14 +54,14 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     @GetMapping("/public")
-    public String publicEndpoint() {
-        return "Este é um endpoint público!";
+    public ResponseEntity<String> publicEndpoint() {
+        return ResponseEntity.ok("Este é um endpoint público!");
     }
 
     @GetMapping("/admin")
-    public String adminEndpoint() {
-        return "Este é um endpoint apenas para ADMIN!";
+    public ResponseEntity<String> adminEndpoint() {
+        return ResponseEntity.ok("Este é um endpoint apenas para ADMIN!");
     }
 }

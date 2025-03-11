@@ -1,32 +1,42 @@
 package br.com.pawloandre.users.model;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
+    @Test
+    void testUserValidationSuccess() {
+        User user = new User();
+        user.setName("John Doe");
+        user.setUsername("johndoe");
+        user.setPassword("password123");
+        user.setRoles(List.of("USER"));
 
-	@BeforeEach
-	void setUp() throws Exception {
-	}
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertTrue(violations.isEmpty());
+    }
 
-	@AfterEach
-	void tearDown() throws Exception {
-	}
+    @Test
+    void testUserValidationFailure() {
+        User user = new User();
+        user.setName(""); // Nome vazio
+        user.setUsername(""); // Username vazio
+        user.setPassword(""); // Senha vazia
+        user.setRoles(null); // Roles nulo
 
-	@Test
-	void test() {
-		
-	}
-
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertEquals(7, violations.size()); // Espera 4 violações
+    }
 }

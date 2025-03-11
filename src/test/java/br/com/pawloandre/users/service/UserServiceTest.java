@@ -1,32 +1,53 @@
 package br.com.pawloandre.users.service;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import br.com.pawloandre.users.exception.BusinessException;
+import br.com.pawloandre.users.model.User;
+import br.com.pawloandre.users.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
 class UserServiceTest {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
+    @Mock
+    private UserRepository userRepository;
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
-	@BeforeEach
-	void setUp() throws Exception {
-	}
+    @InjectMocks
+    private UserService userService;
 
-	@AfterEach
-	void tearDown() throws Exception {
-	}
+    @Test
+    void testFindAll() {
+        Page<User> userPage = new PageImpl<>(Collections.singletonList(new User()));
+        when(userRepository.findAll(any(Pageable.class))).thenReturn(userPage);
 
-	@Test
-	void test() {
-		
-	}
+        Page<User> result = userService.findAll(PageRequest.of(0, 10));
+        assertEquals(1, result.getTotalElements());
+    }
 
+    @Test
+    void testSaveUserWithExistingUsername() {
+        User user = new User();
+        user.setUsername("existinguser");
+
+        when(userRepository.findByUsername("existinguser")).thenReturn(user);
+
+        assertThrows(BusinessException.class, () -> userService.save(user));
+    }
 }

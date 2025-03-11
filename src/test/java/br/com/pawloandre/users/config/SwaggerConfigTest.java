@@ -1,32 +1,24 @@
 package br.com.pawloandre.users.config;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@SpringBootTest
 class SwaggerConfigTest {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
+    @Autowired
+    private OpenAPI openAPI;
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
-	@Test
-	void test() {
-		
-	}
-
+    @Test
+    void testSwaggerConfig() {
+        assertNotNull(openAPI);
+        assertNotNull(openAPI.getInfo());
+        assertEquals("API RESTful para gerenciamento de usuários", openAPI.getInfo().getTitle());
+        assertEquals("1.0", openAPI.getInfo().getVersion());
+    }
 }

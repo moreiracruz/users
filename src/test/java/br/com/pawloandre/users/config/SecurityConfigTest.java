@@ -1,32 +1,24 @@
 package br.com.pawloandre.users.config;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest
 class SecurityConfigTest {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
-	@Test
-	void test() {
-		
-	}
-
+    @Test
+    void testPasswordEncoder() {
+        String rawPassword = "password";
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        assertNotNull(encodedPassword);
+        assertTrue(passwordEncoder.matches(rawPassword, encodedPassword));
+    }
 }

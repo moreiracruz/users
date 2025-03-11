@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,10 @@ public class SecurityConfig {
 								"/swagger-resources/**", //
 								"/webjars/**" //
 						).permitAll() //
-						
+
+						// Permitir acesso ao console H2 sem autenticação
+						.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+
 						// Proteger outros endpoints
 						
 						.requestMatchers("/users/public").permitAll() // Endpoint público

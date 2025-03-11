@@ -2,17 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
 		<java.version>17</java.version>
 		<project.groupId>br.com.pawloandre.users</project.groupId>
 		<project.artifactId>users</project.artifactId>
-		<project.version>1.0.0</project.version>
-		<docker.image.name>${project.artifactId}:${project.version}</docker.image.name>
+		<project.version>1.0.0-SNAPSHOT</project.version>
 		<git-user>moreiracruz</git-user>
 		<git-repository>users</git-repository>
+		<docker.image.prefix>${git-user}</docker.image.prefix>
+		<project.build.finalName>${project.artifactId}-${project.version}</project.build.finalName>
 	</properties>
 
 	<parent>
@@ -21,47 +22,48 @@
 		<version>3.4.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
+
 	<groupId>${project.groupId}</groupId>
 	<artifactId>${project.artifactId}</artifactId>
-	<version>${project.version}-SNAPSHOT</version>
+	<version>${project.version}</version>
 	<name>${project.artifactId}</name>
 	<description>RESTful API for user management</description>
 
-    <url>https://www.moreiracruz.com.br</url>
+	<url>https://www.moreiracruz.com.br</url>
 
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>https://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<developers>
-        <developer>
-            <name>Paulo André Moreira Cruz</name>
-            <email>pawloandre@icloud.com</email>
-            <url>https://www.moreiracruz.com.br</url>
-            <organization>Moreira Cruz</organization>
-            <organizationUrl>https://www.moreiracruz.com.br</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>-3</timezone>
-            <properties>
-                <phone>+55 (83) 99637-7548</phone>
-            </properties>
-        </developer>
-    </developers>
+		<developer>
+			<name>Paulo André Moreira Cruz</name>
+			<email>pawloandre@icloud.com</email>
+			<url>https://www.moreiracruz.com.br</url>
+			<organization>Moreira Cruz</organization>
+			<organizationUrl>https://www.moreiracruz.com.br</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>-3</timezone>
+			<properties>
+				<phone>+55 (83) 99637-7548</phone>
+			</properties>
+		</developer>
+	</developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/${git-user}/${git-repository}.git</connection>
-        <developerConnection>scm:git:ssh://github.com/${git-user}/${git-repository}.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>https://github.com/${git-user}/${git-repository}</url>
-    </scm>
-    
+	<scm>
+		<connection>scm:git:git://github.com/${git-user}/${git-repository}.git</connection>
+		<developerConnection>
+			scm:git:ssh://github.com/${git-user}/${git-repository}.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/${git-user}/${git-repository}</url>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -109,7 +111,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${docker.image.name}</finalName>
+		<finalName>${project.build.finalName}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -133,6 +135,19 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<!-- Spotify Docker Maven Plugin -->
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<configuration>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+					<tag>${project.version}</tag>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
 				</configuration>
 			</plugin>
 		</plugins>

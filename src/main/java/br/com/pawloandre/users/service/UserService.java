@@ -1,8 +1,11 @@
 package br.com.pawloandre.users.service;
 
-import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.pawloandre.users.exception.BusinessException;
@@ -12,35 +15,41 @@ import br.com.pawloandre.users.repository.UserRepository;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    public User findById(int id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("user.notfound", "Usuário não encontrado", "User not found", "Usuario no encontrado"));
-    }
+	public Page<User> findAll(Pageable pageable) {
+		return userRepository.findAll(pageable);
+	}
 
-    public User save(User user) {
-        if (userRepository.findByUsername(user.getUsername()) != null) {
-            throw new BusinessException("user.username.exists", "Nome de usuário já existe", "Username already exists", "El nombre de usuario ya existe");
-        }
-        return userRepository.save(user);
-    }
+	public User findById(int id) {
+		return userRepository.findById(id).orElseThrow(() -> new BusinessException("user.notfound",
+				"Usuário não encontrado", "User not found", "Usuario no encontrado"));
+	}
 
-    public User update(int id, User user) {
-        User existingUser = findById(id);
-        existingUser.setName(user.getName());
-        existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setRoles(user.getRoles());
-        return userRepository.save(existingUser);
-    }
+	public User save(User user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-    public void delete(int id) {
-        userRepository.deleteById(id);
-    }
+		if (Objects.nonNull(userRepository.findByUsername(user.getUsername()))) {
+			throw new BusinessException("user.username.exists", "Nome de usuário já existe", "Username already exists",
+					"El nombre de usuario ya existe");
+		}
+		return userRepository.save(user);
+	}
+
+	public User update(int id, User user) {
+		User existingUser = findById(id);
+		existingUser.setName(user.getName());
+		existingUser.setUsername(user.getUsername());
+		existingUser.setPassword(user.getPassword());
+		existingUser.setRoles(user.getRoles());
+		return userRepository.save(existingUser);
+	}
+
+	public void delete(int id) {
+		userRepository.deleteById(id);
+	}
 }

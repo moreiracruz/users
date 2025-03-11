@@ -1,4 +1,4 @@
-package br.com.pawloandre.users.repository;
+package br.com.pawloandre.users.exception.handler;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UserRepositoryTest {
+class GlobalExceptionHandlerTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -26,7 +26,7 @@ class UserRepositoryTest {
 
 	@Test
 	void test() {
-		
+
 	}
 
 }

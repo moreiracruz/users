@@ -1,9 +1,20 @@
 package br.com.pawloandre.users.model;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class User {
@@ -16,10 +27,13 @@ public class User {
     private String name;
 
     @NotBlank(message = "{user.username.notblank}")
+    @Size(min = 3, max = 20, message = "{user.username.size}")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "{user.username.pattern}")
     @Column(unique = true)
     private String username;
 
     @NotBlank(message = "{user.password.notblank}")
+    @Size(min = 8, message = "{user.password.size}")
     private String password;
 
     @NotNull(message = "{user.roles.notnull}")

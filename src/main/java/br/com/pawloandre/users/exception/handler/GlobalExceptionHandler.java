@@ -1,6 +1,7 @@
 package br.com.pawloandre.users.exception.handler;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 import org.springframework.cglib.proxy.UndeclaredThrowableException;
 import org.springframework.context.MessageSource;
@@ -47,8 +48,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ BusinessException.class })
 	ResponseEntity<Object> handleBusinessException(BusinessException e, WebRequest request) {
-		ResponseError error = responseError(e.getMessage(), HttpStatus.CONFLICT);
+		Locale locale = request.getLocale();
+		String message = messageSource.getMessage(e.getCode(), null, locale);
+		ResponseError error = responseError(message, HttpStatus.CONFLICT);
 		return handleExceptionInternal(e, error, headers(), HttpStatus.CONFLICT, request);
+	}
+
+	@ExceptionHandler({ IllegalArgumentException.class })
+	ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e, WebRequest request) {
+		ResponseError error = responseError(e.getMessage(), HttpStatus.BAD_REQUEST);
+		return handleExceptionInternal(e, error, headers(), HttpStatus.BAD_REQUEST, request);
 	}
 
 }

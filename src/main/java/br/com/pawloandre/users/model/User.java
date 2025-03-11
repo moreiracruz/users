@@ -15,6 +15,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class User {
@@ -37,9 +39,10 @@ public class User {
     private String password;
 
     @NotNull(message = "{user.roles.notnull}")
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "roles_user", joinColumns = @JoinColumn(name = "user_id"))
-	@Column(name = "role_id")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<String> roles;
 
     // Getters e Setters

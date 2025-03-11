@@ -20,10 +20,24 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()) // Desabilitar CSRF para APIs REST
 				.authorizeHttpRequests(auth -> auth //
+						
+						// Permitir acesso ao Swagger sem autenticação
+						
+						.requestMatchers( //
+								"/swagger-ui.html", //
+								"/v3/api-docs/**", //
+								"/swagger-ui/**", //
+								"/swagger-resources/**", //
+								"/webjars/**" //
+						).permitAll() //
+						
+						// Proteger outros endpoints
+						
 						.requestMatchers("/users/public").permitAll() // Endpoint público
 						.requestMatchers("/users/admin").hasRole("ADMIN") // Apenas ADMIN
 						.requestMatchers("/users/**").authenticated() // Exige autenticação
 						.anyRequest().denyAll() // Bloqueia todas as outras requisições
+						
 				).httpBasic(httpBasic -> {
 				}); // Usar autenticação básica (usuário/senha)
 

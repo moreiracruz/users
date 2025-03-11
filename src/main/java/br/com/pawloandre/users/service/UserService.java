@@ -2,6 +2,7 @@ package br.com.pawloandre.users.service;
 
 import java.util.Objects;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import br.com.pawloandre.users.exception.BusinessException;
 import br.com.pawloandre.users.model.User;
 import br.com.pawloandre.users.repository.UserRepository;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -31,9 +33,11 @@ public class UserService {
 	}
 
 	public User save(User user) {
+		log.info("Salvando usuário: {}", user.getUsername());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		if (Objects.nonNull(userRepository.findByUsername(user.getUsername()))) {
+			log.info("Nome de usuário já existe");
 			throw new BusinessException("user.username.exists", "Nome de usuário já existe", "Username already exists",
 					"El nombre de usuario ya existe");
 		}

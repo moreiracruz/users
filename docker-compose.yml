@@ -15,7 +15,7 @@ services:
       - app-network
 
   app:
-    image: moreiracruz/${project.artifactId}:${project.version}
+    image: moreiracruz/users:1.0.0-SNAPSHOT
     container_name: user_app
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/userdb
